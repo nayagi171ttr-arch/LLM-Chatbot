@@ -138,8 +138,57 @@ button {
 
 .chat-history {
     margin-top: 28px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+/* =========================================================
+   Recent Chats Scrollbar
+   ========================================================= */
+
+.chat-history {
+    scrollbar-width: thin;
+    scrollbar-color: #c7c7c7 transparent;
 }
 
+/* Chrome, Edge, Safari */
+
+.chat-history::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-history::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-history::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 10px;
+}
+
+.chat-history::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+
+/* Dark Mode */
+
+body.dark-mode .chat-history {
+    scrollbar-color: #555555 transparent;
+}
+
+body.dark-mode .chat-history::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body.dark-mode .chat-history::-webkit-scrollbar-thumb {
+    background: #555555;
+}
+
+body.dark-mode .chat-history::-webkit-scrollbar-thumb:hover {
+    background: #777777;
+}
 .history-title {
     padding: 0 8px 9px;
 
