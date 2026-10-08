@@ -9,8 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>AI Chatbot</title>
-
-    <link rel="stylesheet" href="{% static 'chat/style.css' %}">
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+    <link rel="stylesheet" href="{% static 'chat/style.css' %}?v=2">
 </head>
 
 <body>
@@ -46,11 +49,18 @@
             </div>
 
             <div class="sidebar-bottom">
-                <button class="sidebar-option">
-                    ⚙️
-                    <span>Settings</span>
-                </button>
-            </div>
+
+               <button class="sidebar-option theme-toggle-btn" id="theme-toggle">
+            🌙
+                <span>Dark mode</span>
+                   </button>
+
+                   <button class="sidebar-option">
+                   ⚙️
+                  <span>Settings</span>
+               </button>
+
+          </div>
 
         </aside>
 
@@ -168,6 +178,6 @@
     </div>
 
 </div>
-<script src="{% static 'chat/script.js' %}"></script>
+<script src="{% static 'chat/script.js' %}?v=2"></script>
 </body>
 </html>

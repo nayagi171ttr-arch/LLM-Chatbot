@@ -106,17 +106,96 @@ function showBotMessage(message) {
 
     botMessage.className = "message bot-message";
 
+    const content = document.createElement("div");
+
+    content.className = "message-content";
+
+    let formattedMessage = message;
+
+    // Escape HTML
+    formattedMessage = formattedMessage
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    // Code blocks
+    formattedMessage = formattedMessage.replace(
+        /```([\s\S]*?)```/g,
+        "<pre><code>$1</code></pre>"
+    );
+
+    // Headings
+    formattedMessage = formattedMessage.replace(
+        /^###\s+(.*)$/gm,
+        "<h3>$1</h3>"
+    );
+
+    formattedMessage = formattedMessage.replace(
+        /^##\s+(.*)$/gm,
+        "<h2>$1</h2>"
+    );
+
+    formattedMessage = formattedMessage.replace(
+        /^#\s+(.*)$/gm,
+        "<h1>$1</h1>"
+    );
+
+    // Bold
+    formattedMessage = formattedMessage.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+    // Italic
+    formattedMessage = formattedMessage.replace(
+        /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+        "<em>$1</em>"
+    );
+
+    // Horizontal line
+    formattedMessage = formattedMessage.replace(
+        /^\s*([-*_])\s*\1\s*\1+\s*$/gm,
+        "<hr>"
+    );
+
+    // Numbered lists
+    formattedMessage = formattedMessage.replace(
+        /^\s*\d+\.\s+(.*)$/gm,
+        "<li>$1</li>"
+    );
+
+    // Bullet lists
+    formattedMessage = formattedMessage.replace(
+        /^\s*[-*]\s+(.*)$/gm,
+        "<li>$1</li>"
+    );
+
+    // Wrap consecutive list items
+    formattedMessage = formattedMessage.replace(
+        /(?:<li>.*?<\/li>\s*)+/gs,
+        function(list) {
+            return "<ul>" + list + "</ul>";
+        }
+    );
+
+    // Convert remaining line breaks
+    formattedMessage = formattedMessage.replace(
+        /\n/g,
+        "<br>"
+    );
+
+    content.innerHTML = formattedMessage;
+
     botMessage.innerHTML = `
         <div class="message-avatar">✦</div>
-
-        <div class="message-content">
-            ${message}
-        </div>
     `;
 
-    messagesArea.appendChild(botMessage);
-}
+    botMessage.appendChild(content);
 
+    messagesArea.appendChild(botMessage);
+
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
 
 // Send button
 sendButton.addEventListener("click", sendMessage);
@@ -332,21 +411,11 @@ async function loadChat(chatId) {
 
             }
 
-            if (message.role === "assistant") {
+          if (message.role === "assistant") {
 
-                const botMessage = document.createElement("div");
+            showBotMessage(message.content);
 
-                botMessage.className = "message bot-message";
-
-                botMessage.innerHTML = `
-                    <div class="message-avatar">✦</div>
-                    <div class="message-content">
-                        ${message.content}
-                    </div>
-                `;
-
-                messagesArea.appendChild(botMessage);
-            }
+        }
 
         });
 
@@ -579,3 +648,44 @@ document.addEventListener("click", function() {
     });
 
 });
+
+
+const themeToggle = document.getElementById("theme-toggle");
+
+themeToggle.addEventListener("click", function() {
+
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+
+        themeToggle.innerHTML = `
+            ☀️
+            <span>Light mode</span>
+        `;
+
+        localStorage.setItem("theme", "dark");
+
+    } else {
+
+        themeToggle.innerHTML = `
+            🌙
+            <span>Dark mode</span>
+        `;
+
+        localStorage.setItem("theme", "light");
+    }
+
+});
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+
+    document.body.classList.add("dark-mode");
+
+    themeToggle.innerHTML = `
+        ☀️
+        <span>Light mode</span>
+    `;
+
+}

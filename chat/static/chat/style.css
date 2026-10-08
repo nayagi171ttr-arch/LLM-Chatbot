@@ -1,7 +1,34 @@
+:root {
+    --bg-color: #ffffff;
+    --sidebar-bg: #f7f7f8;
+    --chat-bg: #ffffff;
+    --text-color: #222222;
+    --secondary-text: #777777;
+    --border-color: #e5e5e5;
+    --input-bg: #f7f7f8;
+    --button-hover: #eeeeee;
+    --message-user-bg: #f1f1f1;
+    --message-bot-bg: #f7f7f8;
+}
+
+body.dark-mode {
+    --bg-color: #121212;
+    --sidebar-bg: #1b1b1b;
+    --chat-bg: #181818;
+    --text-color: #f1f1f1;
+    --secondary-text: #aaaaaa;
+    --border-color: #333333;
+    --input-bg: #242424;
+    --button-hover: #333333;
+    --message-user-bg: #2d2d2d;
+    --message-bot-bg: #222222;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Inter", sans-serif;
 }
 
 body {
@@ -392,6 +419,42 @@ button {
     font-size: 11px;
 }
 
+.message-content h1,
+.message-content h2,
+.message-content h3 {
+    margin: 12px 0 8px;
+    line-height: 1.4;
+}
+
+.message-content ul {
+    margin: 8px 0;
+    padding-left: 22px;
+}
+
+.message-content li {
+    margin: 5px 0;
+}
+
+.message-content hr {
+    margin: 14px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+.message-content pre {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    overflow-x: auto;
+    background: #f5f5f5;
+}
+
+.message-content code {
+    font-family: monospace;
+}
+
+
+
 
 /* =========================================================
    Mobile
@@ -607,9 +670,33 @@ button {
    ========================================================= */
 
 .history-item {
-    position: relative;
+    position:relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
 }
 
+.history-chat-title {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.history-chat-title .chat-title-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-menu-wrapper {
+    position: relative;
+    margin-left: auto;
+    flex: 0 0 30px;
+}
 .chat-menu-wrapper {
     position: relative;
     margin-left: auto;
@@ -684,4 +771,225 @@ button {
 .chat-option.delete-chat-btn:hover {
     background: #fff1f1;
     color: #d32f2f;
+}
+/* =========================================================
+   Dark Mode
+   ========================================================= */
+
+body.dark-mode {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Main areas */
+
+body.dark-mode .sidebar {
+    background: var(--sidebar-bg);
+    border-right-color: var(--border-color);
+}
+
+body.dark-mode .chat-main {
+    background: var(--chat-bg);
+}
+
+body.dark-mode .chat-header {
+    border-bottom-color: var(--border-color);
+}
+
+
+/* Text */
+
+body.dark-mode .brand,
+body.dark-mode .model-info h2,
+body.dark-mode .welcome-message h1,
+body.dark-mode .message-content,
+body.dark-mode .history-item {
+    color: var(--text-color);
+}
+
+body.dark-mode .history-title,
+body.dark-mode .welcome-message p,
+body.dark-mode .model-info span,
+body.dark-mode .input-note {
+    color: var(--secondary-text);
+}
+
+
+/* New Chat */
+
+body.dark-mode .new-chat-btn {
+    background: var(--input-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .new-chat-btn:hover {
+    background: var(--button-hover);
+}
+
+
+/* Chat History */
+
+body.dark-mode .history-item.active,
+body.dark-mode .history-item:hover {
+    background: var(--button-hover);
+}
+
+
+/* Sidebar buttons */
+
+body.dark-mode .sidebar-option {
+    color: var(--text-color);
+}
+
+body.dark-mode .sidebar-option:hover {
+    background: var(--button-hover);
+}
+
+
+/* Header buttons */
+
+body.dark-mode .header-menu-btn {
+    color: var(--text-color);
+}
+
+body.dark-mode .header-menu-btn:hover {
+    background: var(--button-hover);
+}
+
+body.dark-mode .mobile-menu-btn {
+    color: var(--text-color);
+}
+
+
+/* Input */
+
+body.dark-mode .input-wrapper {
+    background: var(--input-bg);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .input-wrapper:focus-within {
+    border-color: #666;
+}
+
+body.dark-mode #message-input {
+    color: var(--text-color);
+}
+
+body.dark-mode #message-input::placeholder {
+    color: #888;
+}
+
+
+/* Send button */
+
+body.dark-mode .send-btn {
+    background: #eeeeee;
+    color: #181818;
+}
+
+body.dark-mode .send-btn:hover {
+    background: #ffffff;
+}
+
+
+/* Message avatars */
+
+body.dark-mode .message-avatar {
+    background: #333333;
+    color: #eeeeee;
+}
+
+body.dark-mode .user-message .message-avatar {
+    background: #eeeeee;
+    color: #181818;
+}
+
+
+/* User message */
+
+body.dark-mode .user-message .message-content {
+    background: var(--message-user-bg);
+    color: var(--text-color);
+}
+
+
+/* Bot message */
+
+body.dark-mode .message-bot .message-content,
+body.dark-mode .bot-message .message-content {
+    color: var(--text-color);
+}
+
+
+/* Markdown elements */
+
+body.dark-mode .message-content hr {
+    border-top-color: var(--border-color);
+}
+
+body.dark-mode .message-content pre {
+    background: #242424;
+    color: #eeeeee;
+}
+
+
+/* Three-dot menu */
+
+body.dark-mode .chat-more-btn {
+    color: #aaaaaa;
+}
+
+body.dark-mode .chat-more-btn:hover {
+    background: var(--button-hover);
+    color: #ffffff;
+}
+
+body.dark-mode .chat-options-menu {
+    background: #242424;
+    border-color: var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .chat-option {
+    color: #eeeeee;
+}
+
+body.dark-mode .chat-option:hover {
+    background: #333333;
+}
+
+body.dark-mode .chat-option.delete-chat-btn:hover {
+    background: #3a2020;
+    color: #ff6b6b;
+}
+
+
+/* Delete modal */
+
+body.dark-mode .delete-chat-modal-content {
+    background: #242424;
+    color: var(--text-color);
+}
+
+body.dark-mode .delete-chat-modal-content h2 {
+    color: var(--text-color);
+}
+
+body.dark-mode .delete-chat-modal-content p {
+    color: var(--secondary-text);
+}
+
+body.dark-mode .delete-chat-modal-icon {
+    background: #3a2020;
+}
+
+body.dark-mode .cancel-delete-modal-btn {
+    background: #333333;
+    color: #eeeeee;
+}
+
+body.dark-mode .cancel-delete-modal-btn:hover {
+    background: #444444;
 }
