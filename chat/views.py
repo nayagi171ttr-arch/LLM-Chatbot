@@ -4,7 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ollama import chat
 from .models import Chat
-
+import json
+import os
+import urllib.request
 
 def chat_page(request):
 
@@ -71,12 +73,37 @@ def send_message(request):
         })
 
         # Send conversation to Ollama
-        response = chat(
-            model="qwen3:1.7b",
-            messages=messages
+       
+        # Send conversation securely to the local Ollama proxy
+        proxy_url = os.environ.get("OLLAMA_PROXY_URL", "").rstrip("/")
+        proxy_token = os.environ.get("OLLAMA_PROXY_TOKEN", "")
+
+        if not proxy_url or not proxy_token:
+            raise RuntimeError("Ollama proxy configuration is missing.")
+
+        payload = {
+            "model": "qwen3:1.7b",
+            "messages": messages,
+            "stream": False,
+        }
+
+        req = urllib.request.Request(
+            f"{proxy_url}/api/chat",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {proxy_token}",
+            },
+            method="POST",
         )
 
-        bot_message = response.message.content
+        with urllib.request.urlopen(req, timeout=300) as api_response:
+            response_data = json.loads(
+                api_response.read().decode("utf-8")
+            )
+
+        bot_message = response_data["message"]["content"]
+
 
         # Add AI response
         messages.append({
