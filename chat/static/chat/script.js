@@ -449,12 +449,33 @@ async function renameChat(chatId, currentTitle, chatItem) {
         >
     `;
 
-    const actions = chatItem.querySelector(".chat-actions");
-
-    actions.innerHTML = `
-        <button class="save-chat-btn" title="Save">✓</button>
-        <button class="cancel-chat-btn" title="Cancel">✕</button>
-    `;
+    let actions = chatItem.querySelector(".chat-actions");
+    if (!actions) {
+        const menuWrapper = chatItem.querySelector(".chat-menu-wrapper");
+        if (menuWrapper) {
+            menuWrapper.innerHTML = `
+                <div class="chat-actions">
+                    <button class="save-chat-btn" title="Save">✓</button>
+                    <button class="cancel-chat-btn" title="Cancel">✕</button>
+                </div>
+            `;
+            actions = chatItem.querySelector(".chat-actions");
+        } else {
+            const container = document.createElement("div");
+            container.className = "chat-actions";
+            container.innerHTML = `
+                <button class="save-chat-btn" title="Save">✓</button>
+                <button class="cancel-chat-btn" title="Cancel">✕</button>
+            `;
+            chatItem.appendChild(container);
+            actions = container;
+        }
+    } else {
+        actions.innerHTML = `
+            <button class="save-chat-btn" title="Save">✓</button>
+            <button class="cancel-chat-btn" title="Cancel">✕</button>
+        `;
+    }
 
     const input = titleContainer.querySelector(".chat-title-input");
 
@@ -477,6 +498,10 @@ async function renameChat(chatId, currentTitle, chatItem) {
 
         loadChats();
 
+    });
+
+    input.addEventListener("click", function(event) {
+        event.stopPropagation();
     });
 
     // Press Enter to save

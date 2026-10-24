@@ -75,34 +75,44 @@ def send_message(request):
         # Send conversation to Ollama
        
         # Send conversation securely to the local Ollama proxy
+      
+        # Send conversation to Ollama
         proxy_url = os.environ.get("OLLAMA_PROXY_URL", "").rstrip("/")
         proxy_token = os.environ.get("OLLAMA_PROXY_TOKEN", "")
 
-        if not proxy_url or not proxy_token:
-            raise RuntimeError("Ollama proxy configuration is missing.")
+        if proxy_url and proxy_token:
+            # Deployed server: use the protected Ollama proxy
+            payload = {
+                "model": "qwen3:1.7b",
+                "messages": messages,
+                "stream": False,
+            }
 
-        payload = {
-            "model": "qwen3:1.7b",
-            "messages": messages,
-            "stream": False,
-        }
-
-        req = urllib.request.Request(
-            f"{proxy_url}/api/chat",
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {proxy_token}",
-            },
-            method="POST",
-        )
-
-        with urllib.request.urlopen(req, timeout=300) as api_response:
-            response_data = json.loads(
-                api_response.read().decode("utf-8")
+            req = urllib.request.Request(
+                f"{proxy_url}/api/chat",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {proxy_token}",
+                },
+                method="POST",
             )
 
-        bot_message = response_data["message"]["content"]
+            with urllib.request.urlopen(req, timeout=300) as api_response:
+                response_data = json.loads(
+                    api_response.read().decode("utf-8")
+                )
+
+            bot_message = response_data["message"]["content"]
+
+        else:
+            # Local PC: connect directly to Ollama
+            response = chat(
+                model="qwen3:1.7b",
+                messages=messages,
+            )
+
+            bot_message = response.message.content
 
 
         # Add AI response
